@@ -1,0 +1,26 @@
+.myform-wrapper {
+  margin: 8px;
+  min-width: 350px;
+  width: 350px;
+  mat-form-field{
+    width: 100%;
+  }
+  .mat-toolbar-single-row{
+    height: auto !important;
+    background: transparent;
+    button{
+      width: 30%;
+    }
+  }
+}
+
+#fileUpload {
+  position: absolute;
+  z-index: 9;
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+  cursor: pointer;
+}

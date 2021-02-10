@@ -1,0 +1,14 @@
+<div class="myform-wrapper">
+  <mat-form-field>
+      <mat-toolbar class="mat-toolbar-single-row">
+        <!-- Readonly Input to show file names -->
+        <input matInput [(ngModel)]="myFileName" readonly name="memberContactNo">
+        <!-- Browse button -->
+        <button mat-flat-button color="primary">
+          Find
+        </button>
+      </mat-toolbar>
+      <!-- Fetch selected filed on change -->
+      <input type="file" #uploadFileInput id="fileUpload" (change)="fileChangeEvent($event)" multiple="false" accept=".xls, .xlsx" />
+  </mat-form-field>
+</div>
