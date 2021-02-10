@@ -6,10 +6,15 @@ import { AngularMaterialModule } from '../angular-material.module';
 
 
 @NgModule({
-  declarations: [BrowseFileButtonComponent],
+  declarations: [
+    BrowseFileButtonComponent
+  ],
   imports: [
     CommonModule,
     AngularMaterialModule
+  ],
+  exports: [
+    BrowseFileButtonComponent
   ]
 })
 export class SharedModule { }
