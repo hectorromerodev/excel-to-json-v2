@@ -20,7 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 // import { MatSortModule } from '@angular/material/sort';
 // import { MatTableModule } from '@angular/material/table';
 // import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-// import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 // import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 // import { MatSelectModule } from '@angular/material/select';
@@ -44,7 +44,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     // MatSidenavModule,
     MatIconModule,
     // MatListModule,
-    // MatSnackBarModule,
+    MatSnackBarModule,
     // MatPaginatorModule,
     // MatTooltipModule,
     MatDialogModule,
