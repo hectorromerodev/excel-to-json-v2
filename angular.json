@@ -35,10 +35,7 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": [
-              "file-saver",
-              "xlsx"
-            ]
+            "allowedCommonJsDependencies": ["file-saver", "xlsx"]
           },
           "configurations": {
             "production": {
@@ -129,10 +126,6 @@
               "devServerTarget": "excel-to-json-v2:serve:production"
             }
           }
-        },
-        "deploy": {
-          "builder": "angular-cli-ghpages:deploy",
-          "options": {}
         }
       }
     }
