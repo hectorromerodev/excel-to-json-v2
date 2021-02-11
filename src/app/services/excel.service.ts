@@ -1,60 +1,32 @@
 import { Injectable } from '@angular/core';
-import { CellValue, Row, RowValues, Workbook, Worksheet } from 'exceljs';
+import { read, utils, WorkBook, WorkSheet } from 'xlsx';
 import { saveAs } from 'file-saver';
+
+const EXCEL_EXTENSION = '.xlsx';
+const JSON_EXTENSION = '.json'
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExcelService {
-
   constructor() { }
+  fileName: string = 'Excel to Json';
 
   generateExcel() {
 
   }
 
-  async convertExcelToJson(data: Buffer) {
-    // Read from a file
-    const workbook = new Workbook();
-    await workbook.xlsx.load(data)
-      .then(() => {
-        let worksheet = workbook.getWorksheet(1);
-        let dataArray = this.changeRowsToDic(worksheet);
-        console.log(dataArray);
-      });
-    // Use woorkbook
-
-
-    // a.getWorksheet(1).eachRow((row, rowNumber) => {
-    //   // console.log('Row ' + rowNumber + ' = ' + JSON.stringify(row.values));
-    //   row.eachCell((cell, colNumber) => {
-    //     console.log('Cell ' + colNumber + ' = ' + JSON.stringify(cell.value));
-    //     // console.log(cell);
-    //   });
-    // });
-    // console.log(a.getWorksheet(1).getSheetValues()); // the json object
+  convertExcelToJson(file: ArrayBuffer): Object {
+    const workbook: WorkBook = read(file, { type: 'buffer' });
+    const worksheetName: string = workbook.SheetNames[0];
+    const worksheet: WorkSheet = workbook.Sheets[worksheetName];
+    const json: Object = utils.sheet_to_json(worksheet);
+    return json;
   }
 
-  changeRowsToDic(worksheet: Worksheet) {
-    let dataArray;
-    let keys: CellValue[] | any;
-    worksheet.eachRow((row, rowNumber) => {
-      if (rowNumber === 1) {
-        keys = row.values;
-      } else {
-        let rowDic = this.cellValueToDic(keys, row);
-        dataArray.push(rowDic);
-      }
-    });
-    return dataArray;
-  }
-  cellValueToDic(keys: any, row: Row) {
-    let data;
-    row.eachCell((cell, colNumber) => {
-      let value = cell.value;
-      if (typeof value == "object") { value = value?.toString() };
-      data[keys[colNumber]] = value;
-    });
-    return data;
+  downloadJson(json: Object, fileName: string) {
+    const theJson = JSON.stringify(json);
+    const blobFile: Blob = new Blob([theJson], { type: 'text/json;charset=UTF-8' });
+    saveAs(blobFile, `${fileName ? fileName : 'A Json'} - ${new Date().toLocaleDateString()}${JSON_EXTENSION}`);
   }
 }
