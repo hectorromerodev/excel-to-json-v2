@@ -35,7 +35,7 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": ["file-saver", "exceljs"]
+            "allowedCommonJsDependencies": ["file-saver", "xlsx"]
           },
           "configurations": {
             "production": {
