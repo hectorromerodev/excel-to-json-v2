@@ -17,7 +17,7 @@ export class BrowseFileButtonComponent implements OnInit {
   ) { }
   @ViewChild('uploadFileInput') uploadFileInput!: ElementRef;
   myFileName = 'Select a File';
-  @Output() jsonData = {};
+  jsonData = {};
   showOptions: boolean = false;
   ngOnInit(): void { }
 
@@ -60,6 +60,13 @@ export class BrowseFileButtonComponent implements OnInit {
     attempt();
     this.openSnackBar('JSON Copied to your clipboard!!!');
   }
+
+  openFile() {
+    let myWindow = window.open('', '', 'width=200,height=100');
+    myWindow?.document.write(JSON.stringify(this.jsonData));
+    myWindow?.stop();
+  }
+
   openSnackBar(message: string, action = 'OK', duration = 3000) {
     this.snackBar.open(message, action, {
       duration,
@@ -67,4 +74,5 @@ export class BrowseFileButtonComponent implements OnInit {
       verticalPosition: 'top',
     });
   }
+
 }
