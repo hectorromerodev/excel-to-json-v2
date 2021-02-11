@@ -1,14 +1,26 @@
 <div class="myform-wrapper">
+  <h1>Select a file to convert</h1>
   <mat-form-field>
       <mat-toolbar class="mat-toolbar-single-row">
         <!-- Readonly Input to show file names -->
         <input matInput [(ngModel)]="myFileName" readonly name="memberContactNo">
         <!-- Browse button -->
         <button mat-flat-button color="primary">
-          Find
+          <mat-icon>folder_open</mat-icon>
+          BROWSE
         </button>
       </mat-toolbar>
       <!-- Fetch selected filed on change -->
-      <input type="file" #uploadFileInput id="fileUpload" (change)="fileChangeEvent($event)" multiple="false" accept=".xls, .xlsx" />
-  </mat-form-field>
+      <input type="file" #uploadFileInput id="fileUpload" (change)="import($event)" multiple="false" accept=".xls, .xlsx" />
+    </mat-form-field>
+    <div *ngIf="showOptions">
+      <button mat-button (click)="download()">
+        <mat-icon>download</mat-icon>
+        DOWNLOAD
+      </button>
+      <button mat-button (click)="copyJson()">
+        <mat-icon>content_copy</mat-icon>
+        COPY
+      </button>
+    </div>
 </div>

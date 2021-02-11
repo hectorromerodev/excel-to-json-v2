@@ -1,5 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ExcelService } from 'src/app/services/excel.service';
+import { ConvertExcel } from '../../interfaces/convert-excel';
 
 @Component({
   selector: 'app-browse-file-button',
@@ -8,55 +11,60 @@ import { ExcelService } from 'src/app/services/excel.service';
 })
 export class BrowseFileButtonComponent implements OnInit {
   constructor(
-    private excelServ: ExcelService
+    private excelServ: ExcelService,
+    private clipboard: Clipboard,
+    private snackBar: MatSnackBar
   ) { }
   @ViewChild('uploadFileInput') uploadFileInput!: ElementRef;
   myFileName = 'Select a File';
+  @Output() jsonData = {};
+  showOptions: boolean = false;
+  ngOnInit(): void { }
 
-  ngOnInit(): void {
-  }
-
-  fileChangeEvent(fileInput: any) {
-    if (fileInput.target.files && fileInput.target.files[0]) {
-      this.myFileName = '';
-      Array.from(fileInput.target.files).forEach((file: any) => {
-        console.log(file); // <-- Debugging propose
-        this.myFileName += file.name;
-      });
-
-      this.excelServ.convertExcelToJson(fileInput.target.files[0]);
-      // Reset File Input to select same file again
-      this.uploadFileInput.nativeElement.value = "";
+  import(fileInput: any) {
+    const target: DataTransfer = <DataTransfer>(fileInput.target);
+    // Validate just one file at time
+    if (target.files.length === 1) {
+      const file: File = target.files[0];
+      const reader: FileReader = new FileReader();
+      reader.readAsArrayBuffer(file);
+      reader.onload = (evt: any) => {
+        this.myFileName = file.name.split('.')[0];
+        this.jsonData = this.excelServ.convertExcelToJson(evt.target.result);
+        this.showOptions = true;
+      };
     } else {
       this.myFileName = 'Select File';
-    }
-  }
-
-  import(evt: any) {
-    const target: DataTransfer = (evt.target) as DataTransfer;
-    const file = target.files[0];
-    const reader: FileReader = new FileReader();
-    let importResult = [];
-
-    if (target.files.length !== 1) {
-      console.error('You can only import just one file at time');
-    }
-
-    reader.readAsArrayBuffer(file);
-    reader.onload = (e: any) => {
-      try {
-        const bstring = e.target.result;
-        this.excelServ.convertExcelToJson(bstring);
-        // const wb: WorkBook = read(bstring, { type: 'binary' });
-        // const wsname: string = wb.SheetNames[0];
-        // const ws: WorkSheet = wb.Sheets[wsname];
-        // importResult = utils.sheet_to_json(ws, { raw: false });
-        // this.handleImport(importResult);
-      } catch (e) {
-        // Reset the import input
-        console.error('File type not valid');
-      }
+      this.showOptions = false;
+      throw new Error('You can only import one file at time');
     }
     this.uploadFileInput.nativeElement.value = '';
+  }
+
+  download() {
+    this.excelServ.downloadJson(this.jsonData, this.myFileName);
+  }
+
+  copyJson() {
+    const pending = this.clipboard.beginCopy(JSON.stringify(this.jsonData));
+    let remainingAttempts = 3;
+    const attempt = () => {
+      const result = pending.copy();
+      if (!result && --remainingAttempts) {
+        setTimeout(attempt);
+      } else {
+        // Destroy the
+        pending.destroy();
+      }
+    };
+    attempt();
+    this.openSnackBar('JSON Copied to your clipboard!!!');
+  }
+  openSnackBar(message: string, action = 'OK', duration = 3000) {
+    this.snackBar.open(message, action, {
+      duration,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
   }
 }
