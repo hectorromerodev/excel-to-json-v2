@@ -17,7 +17,7 @@ export class BrowseFileButtonComponent implements OnInit {
   ) { }
   @ViewChild('uploadFileInput') uploadFileInput!: ElementRef;
   myFileName = 'Select a File';
-  jsonData = {};
+  jsonData: any;
   showOptions: boolean = false;
   ngOnInit(): void { }
 
@@ -75,4 +75,23 @@ export class BrowseFileButtonComponent implements OnInit {
     });
   }
 
+  transformEmployees() {
+    const employee: Employee[] = [];
+    this.jsonData.forEach((e: any) => {
+      employee.push({
+        id: e.id,
+        name: e.name?.toUpperCase(),
+        paternal_surname: e.surname.split(' ')[0]?.toUpperCase(),
+        maternal_surname: e.surname.split(' ')[1]?.toUpperCase()
+      })
+    });
+    this.jsonData = employee;
+  }
+}
+
+interface Employee {
+  id: number | string;
+  name: string;
+  paternal_surname: string;
+  maternal_surname: string;
 }

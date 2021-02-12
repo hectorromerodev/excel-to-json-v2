@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'excel-to-json-v2';
+  constructor() {
+
+  }
+  data = null;
 }
