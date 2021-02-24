@@ -82,16 +82,64 @@ export class BrowseFileButtonComponent implements OnInit {
         id: e.id,
         name: e.name?.toUpperCase(),
         paternal_surname: e.surname.split(' ')[0]?.toUpperCase(),
-        maternal_surname: e.surname.split(' ')[1]?.toUpperCase()
+        maternal_surname: e.surname.split(' ')[1]?.toUpperCase(),
+        entry_date: e?.entry_date === 'PERMANENTE' ? new Date('01/01/2099') : new Date(e?.entry_date),
+        curp: e?.curp.toUpperCase(),
+        rfc: e?.rfc.replace('-', '').toUpperCase(),
+        nss: parseInt(e?.nss),
+        birthdate: new Date(e?.birthdate),
+        lic_num: e?.lic_num.toUpperCase(),
+        lic_validity: new Date(e?.lic_validity),
+        lic_type: e?.lic_type.toUpperCase(),
+        position: e?.position.toUpperCase(),
+        department: e?.department.toUpperCase(),
+        phone: parseInt(e?.phone),
+        email: e?.email.toUpperCase(),
+        enabled: 1
       })
     });
+    console.log(employee);
     this.jsonData = employee;
   }
 }
 
-interface Employee {
-  id: number | string;
+
+export interface PersonI {
+  id: any;
   name: string;
   paternal_surname: string;
-  maternal_surname: string;
+  maternal_surname?: string;
+}
+
+export interface Employee extends PersonI {
+  // Employee info
+  photo?: string;
+  birthdate: Date | string;
+
+  // Personal info
+  curp: string;
+  rfc: string;
+  nss: number | string;
+  nid?: string;
+  lic_num: string;
+  lic_type: string;
+  lic_validity: Date | string;
+
+  // Contact info
+  email: string;
+  phone: number;
+  addr_street?: string;
+  addr_no?: string;
+  addr_neighborhood?: string;
+  addr_postcode?: string;
+  addr_town?: string;
+  addr_state?: string;
+
+  // Working info
+  position: string;
+  department: string;
+  branch_office?: string;
+  entry_date: Date | string;
+  comments?: string;
+  enabled: number | string;
 }
