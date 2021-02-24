@@ -58,7 +58,7 @@ export class BrowseFileButtonComponent implements OnInit {
       }
     };
     attempt();
-    this.openSnackBar('JSON Copied to your clipboard!!!');
+    this.openSnackBar('JSON Copied to your clipboard!', 10000);
   }
 
   openFile() {
@@ -67,7 +67,7 @@ export class BrowseFileButtonComponent implements OnInit {
     myWindow?.stop();
   }
 
-  openSnackBar(message: string, action = 'OK', duration = 3000) {
+  openSnackBar(message: string, duration = 3000, action = 'OK',) {
     this.snackBar.open(message, action, {
       duration,
       horizontalPosition: 'right',
@@ -79,22 +79,22 @@ export class BrowseFileButtonComponent implements OnInit {
     const employee: Employee[] = [];
     this.jsonData.forEach((e: any) => {
       employee.push({
-        id: e.id,
+        id: parseInt(e.id) || null,
         name: e.name?.toUpperCase(),
         paternal_surname: e.surname.split(' ')[0]?.toUpperCase(),
         maternal_surname: e.surname.split(' ')[1]?.toUpperCase(),
-        entry_date: e?.entry_date === 'PERMANENTE' ? new Date('01/01/2099') : new Date(e?.entry_date),
-        curp: e?.curp.toUpperCase(),
-        rfc: e?.rfc.replace('-', '').toUpperCase(),
-        nss: parseInt(e?.nss),
-        birthdate: new Date(e?.birthdate),
-        lic_num: e?.lic_num.toUpperCase(),
-        lic_validity: new Date(e?.lic_validity),
-        lic_type: e?.lic_type.toUpperCase(),
-        position: e?.position.toUpperCase(),
-        department: e?.department.toUpperCase(),
-        phone: parseInt(e?.phone),
-        email: e?.email.toUpperCase(),
+        entry_date: new Date(e?.entry_date),
+        curp: e?.curp?.toUpperCase(),
+        rfc: e?.rfc?.split('-').join('') || null,
+        nss: parseInt(e?.nss?.split('-').join('')) || '',
+        birthdate: e.birthdate ? new Date(e.birthdate) : null,
+        lic_num: e?.lic_num,
+        lic_validity: e.lic_validity !== null ? e.lic_validity === 'PERMANENTE' ? new Date('9/3/2099') : new Date(e?.lic_validity) : '',
+        lic_type: e?.lic_type?.toUpperCase(),
+        position: e?.position?.toUpperCase(),
+        department: e?.department?.toUpperCase(),
+        phone: parseInt(e?.phone?.split('-').join('')),
+        email: e?.email?.toUpperCase(),
         enabled: 1
       })
     });
@@ -114,7 +114,7 @@ export interface PersonI {
 export interface Employee extends PersonI {
   // Employee info
   photo?: string;
-  birthdate: Date | string;
+  birthdate: any;
 
   // Personal info
   curp: string;
