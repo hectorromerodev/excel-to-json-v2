@@ -89,7 +89,7 @@ export class BrowseFileButtonComponent implements OnInit {
         nss: parseInt(e?.nss?.split('-').join('')) || '',
         birthdate: e.birthdate ? new Date(e.birthdate) : null,
         lic_num: e?.lic_num,
-        lic_validity: e.lic_validity !== null ? e.lic_validity === 'PERMANENTE' ? new Date('9/3/2099') : new Date(e?.lic_validity) : '',
+        lic_validity: e.lic_validity !== null ? e.lic_validity === 'PERMANENTE' ? new Date('1/1/2100') : new Date(e?.lic_validity) : '',
         lic_type: e?.lic_type?.toUpperCase(),
         position: e?.position?.toUpperCase(),
         department: e?.department?.toUpperCase(),
