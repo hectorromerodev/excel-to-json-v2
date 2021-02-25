@@ -16,7 +16,11 @@
     <div *ngIf="showOptions">
       <button mat-button (click)="download()">
         <mat-icon>download</mat-icon>
-        DOWNLOAD
+        JSON
+      </button>
+      <button mat-button (click)="downloadCSV()">
+        <mat-icon>download</mat-icon>
+        CSV
       </button>
       <button mat-button (click)="copyJson()">
         <mat-icon>content_copy</mat-icon>

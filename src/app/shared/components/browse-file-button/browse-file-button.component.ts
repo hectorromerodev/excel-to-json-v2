@@ -1,8 +1,8 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { DatePipe } from '@angular/common';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExcelService } from 'src/app/services/excel.service';
-import { ConvertExcel } from '../../interfaces/convert-excel';
 
 @Component({
   selector: 'app-browse-file-button',
@@ -13,7 +13,8 @@ export class BrowseFileButtonComponent implements OnInit {
   constructor(
     private excelServ: ExcelService,
     private clipboard: Clipboard,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private datePipe: DatePipe
   ) { }
   @ViewChild('uploadFileInput') uploadFileInput!: ElementRef;
   myFileName = 'Select a File';
@@ -45,6 +46,10 @@ export class BrowseFileButtonComponent implements OnInit {
     this.excelServ.downloadJson(this.jsonData, this.myFileName);
   }
 
+  downloadCSV() {
+    this.excelServ.downloadCSV(this.jsonData, this.myFileName);
+  }
+
   copyJson() {
     const pending = this.clipboard.beginCopy(JSON.stringify(this.jsonData));
     let remainingAttempts = 3;
@@ -74,7 +79,6 @@ export class BrowseFileButtonComponent implements OnInit {
       verticalPosition: 'top',
     });
   }
-
   transformEmployees() {
     const employee: Employee[] = [];
     this.jsonData.forEach((e: any) => {
@@ -83,18 +87,22 @@ export class BrowseFileButtonComponent implements OnInit {
         name: e.name?.toUpperCase(),
         paternal_surname: e.surname.split(' ')[0]?.toUpperCase(),
         maternal_surname: e.surname.split(' ')[1]?.toUpperCase(),
-        entry_date: new Date(e?.entry_date),
+
+        entry_date: e.entry_date ? this.datePipe.transform(e.entry_date, 'YYYY-MM-dd') : '1000-01-01',
         curp: e?.curp?.toUpperCase(),
         rfc: e?.rfc?.split('-').join('') || null,
         nss: parseInt(e?.nss?.split('-').join('')) || '',
-        birthdate: e.birthdate ? new Date(e.birthdate) : null,
+
+        birthdate: e.birthdate ? this.datePipe.transform(e.birthdate, 'YYYY-MM-dd') : '1000-01-01',
         lic_num: e?.lic_num,
-        lic_validity: e.lic_validity !== null ? e.lic_validity === 'PERMANENTE' ? new Date('1/1/2100') : new Date(e?.lic_validity) : '',
+
+        lic_validity: e.lic_validity ? e.lic_validity === 'PERMANENTE' ? this.datePipe.transform('9999-12-31', 'YYYY-MM-dd') : this.datePipe.transform(e.lic_validity, 'YYYY-MM-dd') : '1000-01-01',
         lic_type: e?.lic_type?.toUpperCase(),
         position: e?.position?.toUpperCase(),
         department: e?.department?.toUpperCase(),
-        phone: parseInt(e?.phone?.split('-').join('')),
+        phone: e.phone ? parseInt(e.phone?.split('-').join('')) : null,
         email: e?.email?.toUpperCase(),
+        branch_office: e?.branch_office,
         enabled: 1
       })
     });
@@ -114,7 +122,7 @@ export interface PersonI {
 export interface Employee extends PersonI {
   // Employee info
   photo?: string;
-  birthdate: any;
+  birthdate: Date | string | null;
 
   // Personal info
   curp: string;
@@ -123,11 +131,11 @@ export interface Employee extends PersonI {
   nid?: string;
   lic_num: string;
   lic_type: string;
-  lic_validity: Date | string;
+  lic_validity: Date | string | null;
 
   // Contact info
   email: string;
-  phone: number;
+  phone: number | null;
   addr_street?: string;
   addr_no?: string;
   addr_neighborhood?: string;
@@ -139,7 +147,7 @@ export interface Employee extends PersonI {
   position: string;
   department: string;
   branch_office?: string;
-  entry_date: Date | string;
+  entry_date: Date | string | null;
   comments?: string;
   enabled: number | string;
 }
