@@ -2,7 +2,7 @@
   "name": "excel-to-json-v2",
   "version": "1.0.0",
   "scripts": {
-    "start": "ng serve -o",
+    "start": "ng serve -o --port=4800",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
