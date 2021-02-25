@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module';
 import { SharedModule } from './shared/shared.module';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -16,9 +17,10 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularMaterialModule,
-    SharedModule
+    SharedModule,
+
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
