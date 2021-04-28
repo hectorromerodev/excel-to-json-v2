@@ -14,9 +14,13 @@
       <input type="file" #uploadFileInput id="fileUpload" (change)="import($event)" multiple="false" accept=".xls, .xlsx" />
     </mat-form-field>
     <div *ngIf="showOptions">
-      <button mat-button (click)="download()">
+      <button mat-button (click)="downloadJson()">
         <mat-icon>download</mat-icon>
-        DOWNLOAD
+        JSON
+      </button>
+      <button mat-button (click)="downloadCSV()">
+        <mat-icon>download</mat-icon>
+        CSV
       </button>
       <button mat-button (click)="copyJson()">
         <mat-icon>content_copy</mat-icon>

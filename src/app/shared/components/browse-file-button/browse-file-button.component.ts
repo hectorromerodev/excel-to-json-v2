@@ -41,8 +41,12 @@ export class BrowseFileButtonComponent implements OnInit {
     this.uploadFileInput.nativeElement.value = '';
   }
 
-  download() {
+  downloadJson() {
     this.excelServ.downloadJson(this.jsonData, this.myFileName);
+  }
+
+  downloadCSV() {
+    this.excelServ.downloadCSV(this.jsonData, this.myFileName);
   }
 
   copyJson() {
@@ -58,11 +62,11 @@ export class BrowseFileButtonComponent implements OnInit {
       }
     };
     attempt();
-    this.openSnackBar('JSON Copied to your clipboard!!!');
+    this.openSnackBar('JSON Copied to your clipboard!');
   }
 
   openFile() {
-    let myWindow = window.open('', '', 'width=200,height=100');
+    let myWindow = window.open('', '', 'width=500,height=500');
     myWindow?.document.write(JSON.stringify(this.jsonData));
     myWindow?.stop();
   }
