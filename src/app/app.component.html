@@ -1,10 +1,30 @@
 <header>
   <mat-toolbar color="primary" >
-    <h1>File Converter <small>(Excel to Json)</small></h1>
+    <h1>File Converter</h1>
   </mat-toolbar>
 </header>
 <main>
-  <app-browse-file-button ></app-browse-file-button>
+  <div class="flex-container">
+    <app-browse-file-button ></app-browse-file-button>
+
+    <div class="notes">
+      <h3>Notes</h3>
+      <h5>Make sure your excel file has the header correspondent to the variables names</h5>
+      <table class="table">
+        <tr class="header">
+          <td>name</td>
+          <td>surname</td>
+          <td>otherheader</td>
+        </tr>
+        <tr>
+          <td>Hector</td>
+          <td>Romero</td>
+          <td>Dev</td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
   <footer >
     <mat-toolbar color="primary" class="footer">
       <p>
